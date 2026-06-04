@@ -1,0 +1,223 @@
+/* ==========================================================================
+   Editorial Blueprint — VectorShift-leaning.
+   Warm-paper, institutional editorial look modeled on the live vectorshift.ai:
+   exact neutral palette, bronze accent, Inter Tight sans, Newsreader serif
+   numerals, JetBrains Mono labels, sharp (square) corners, hairline rules.
+   All tokens live here so the whole UI (and every config-driven node) restyles
+   from one place.
+   ========================================================================== */
+
+:root {
+  /* warm-paper neutrals (vectorshift.ai tokens) */
+  --paper: #fbf9f4;
+  --paper-alt: #fcf9f0;
+  --card: #ffffff;
+  --ink: #0f131a;
+  --ink-soft: #20242c;
+  --muted: #54585f;
+  --dim: #8b867d;
+  --border: #d9d3c5;   /* hairline rule */
+  --rule: #bfb7a4;     /* stronger rule */
+
+  /* single bronze accent (monochrome) */
+  --accent: #5b4824;
+
+  /* type system */
+  --font-sans: 'Inter Tight', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'Newsreader', 'Iowan Old Style', Georgia, serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --radius: 0px; /* VectorShift uses square corners */
+  --shadow-card: 0 1px 0 rgba(15, 19, 26, 0.04), 0 12px 26px -18px rgba(15, 19, 26, 0.22);
+}
+
+* { box-sizing: border-box; }
+html, body, #root { height: 100%; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code { font-family: var(--font-mono); }
+
+/* ---- App shell -------------------------------------------------------- */
+.vs-app { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+
+.vs-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 15px 24px;
+  background: var(--paper);
+  border-bottom: 1px solid var(--rule);
+  position: relative; z-index: 5;
+}
+.vs-header__brand { display: flex; align-items: center; gap: 14px; }
+.vs-header__mark {
+  font-family: var(--font-sans); font-weight: 600; font-size: 20px;
+  letter-spacing: -0.01em; color: var(--ink);
+}
+.vs-header__mark-accent { color: var(--accent); }
+.vs-header__divider { width: 1px; height: 18px; background: var(--rule); }
+.vs-header__eyebrow {
+  font-family: var(--font-mono); font-size: 11px; text-transform: uppercase;
+  letter-spacing: 0.18em; color: var(--muted);
+}
+
+/* ---- Toolbar / node palette ------------------------------------------ */
+.vs-toolbar { padding: 16px 24px 12px; }
+.vs-toolbar__eyebrow {
+  display: block; font-family: var(--font-mono); font-size: 10px;
+  text-transform: uppercase; letter-spacing: 0.18em; color: var(--muted);
+  margin-bottom: 10px;
+}
+.vs-toolbar__chips { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.vs-chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 13px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: grab; user-select: none;
+  transition: border-color .12s ease, background .12s ease, transform .12s ease;
+}
+.vs-chip:hover { transform: translateY(-1px); border-color: var(--accent); background: var(--paper-alt); }
+.vs-chip:active { cursor: grabbing; }
+.vs-chip > * { pointer-events: none; } /* drag originates from the chip itself */
+.vs-chip__dot { width: 6px; height: 6px; background: var(--accent); flex: none; }
+.vs-chip__label {
+  font-family: var(--font-mono); font-size: 12px; font-weight: 500;
+  color: var(--ink); letter-spacing: 0.01em;
+}
+
+/* ---- Canvas ----------------------------------------------------------- */
+.vs-canvas { flex: 1 1 auto; min-height: 420px; width: 100%; background: var(--paper); }
+
+.react-flow .react-flow__edge-path { stroke: var(--ink-soft); stroke-width: 1.5px; }
+.react-flow .react-flow__edge.selected .react-flow__edge-path,
+.react-flow .react-flow__edge:hover .react-flow__edge-path { stroke: var(--accent); }
+.react-flow .react-flow__connection-path { stroke: var(--accent); stroke-width: 1.5px; }
+
+.react-flow .react-flow__controls {
+  border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+.react-flow .react-flow__controls-button {
+  background: var(--card); border-bottom: 1px solid var(--border); color: var(--ink);
+}
+.react-flow .react-flow__controls-button:hover { background: var(--paper-alt); }
+.react-flow .react-flow__controls-button svg { fill: var(--ink); }
+.react-flow .react-flow__minimap { border: 1px solid var(--border); border-radius: var(--radius); }
+
+/* ---- Node card -------------------------------------------------------- */
+.vs-node {
+  position: relative;
+  min-width: 200px; width: fit-content; max-width: 520px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-top: 2px solid var(--accent);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  color: var(--ink); font-size: 13px;
+}
+.vs-node__title {
+  padding: 9px 12px;
+  font-family: var(--font-sans); font-weight: 500; font-size: 14px;
+  letter-spacing: -0.005em; color: var(--ink);
+  border-bottom: 1px solid var(--border);
+}
+.vs-node__body { display: flex; flex-direction: column; gap: 10px; padding: 12px; }
+.vs-node__description { margin: 0; font-size: 12.5px; color: var(--muted); }
+
+/* fields */
+.vs-field { display: flex; flex-direction: column; gap: 4px; }
+.vs-field__label {
+  font-family: var(--font-mono); font-size: 10px; font-weight: 500;
+  text-transform: uppercase; letter-spacing: 0.09em; color: var(--dim);
+}
+.vs-field__control {
+  width: 100%; padding: 6px 8px;
+  font-family: var(--font-sans); font-size: 13px; color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--border); border-radius: var(--radius);
+  transition: border-color .12s ease, background .12s ease;
+}
+.vs-field__control:focus {
+  outline: none; border-color: var(--accent); background: var(--card);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 18%, transparent);
+}
+.vs-field__textarea {
+  resize: none; overflow: hidden; min-height: 30px; line-height: 1.45;
+  font-family: var(--font-mono); font-size: 12.5px;
+}
+
+/* handles */
+.react-flow__handle.vs-node__handle {
+  width: 9px; height: 9px; border-radius: 0;
+  background: var(--card); border: 1.5px solid var(--accent);
+  transition: background .1s ease;
+}
+.react-flow__handle.vs-node__handle:hover { background: var(--accent); }
+
+/* ---- Footer / submit -------------------------------------------------- */
+.vs-footer {
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  padding: 16px;
+  border-top: 1px solid var(--rule);
+  background: var(--paper);
+  position: relative; z-index: 5;
+}
+.vs-submit {
+  font-family: var(--font-mono); font-size: 13px; font-weight: 500; letter-spacing: 0.04em;
+  padding: 11px 26px; color: var(--paper); background: var(--ink);
+  border: 1px solid var(--ink); border-radius: var(--radius); cursor: pointer;
+  transition: background .12s ease, border-color .12s ease;
+}
+.vs-submit:hover { background: var(--accent); border-color: var(--accent); }
+
+/* ---- Result toast (in-theme replacement for alert) -------------------- */
+.vs-toast {
+  position: fixed; top: 78px; right: 24px; z-index: 50;
+  width: 300px; padding: 18px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-top: 2px solid var(--accent);
+  border-radius: var(--radius);
+  box-shadow: 0 18px 40px -16px rgba(15, 19, 26, 0.36);
+  animation: vs-toast-in .22s ease;
+}
+@keyframes vs-toast-in { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+
+.vs-toast__close {
+  position: absolute; top: 10px; right: 12px;
+  border: none; background: none; font-size: 19px; line-height: 1;
+  color: var(--dim); cursor: pointer;
+}
+.vs-toast__close:hover { color: var(--ink); }
+.vs-toast__eyebrow {
+  font-family: var(--font-mono); font-size: 10px; text-transform: uppercase;
+  letter-spacing: 0.16em; color: var(--muted);
+}
+.vs-toast__stats { display: flex; gap: 30px; margin: 14px 0; }
+.vs-toast__stat { display: flex; flex-direction: column; }
+.vs-toast__num {
+  font-family: var(--font-serif); font-weight: 500; font-size: 38px; line-height: 1;
+  letter-spacing: -0.01em; color: var(--ink);
+}
+.vs-toast__lab {
+  font-family: var(--font-mono); font-size: 10px; text-transform: uppercase;
+  letter-spacing: 0.12em; color: var(--dim); margin-top: 6px;
+}
+.vs-toast__badge {
+  font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+  letter-spacing: 0.02em; padding: 6px 10px; display: inline-block;
+  border: 1px solid transparent;
+}
+.vs-toast__badge.is-ok { background: #eef4ee; color: #2f5d3a; border-color: #cfe0d2; }
+.vs-toast__badge.is-warn { background: #f6ece4; color: #8a3d1c; border-color: #e6d2c4; }
+.vs-toast__msg { font-family: var(--font-sans); font-size: 13px; color: var(--ink); margin: 12px 0 4px; }
+.vs-toast__hint { font-family: var(--font-mono); font-size: 10.5px; color: var(--dim); margin: 0; }

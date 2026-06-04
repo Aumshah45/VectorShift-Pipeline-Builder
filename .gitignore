@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+
+# Build & coverage
+/frontend/build/
+/frontend/coverage/
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Environment
+.env
+.env*.local
+
+# Logs
+npm-debug.log*
+
+# OS
+.DS_Store
+
+# PDFs — the assessment brief stays local, not committed
+*.pdf
