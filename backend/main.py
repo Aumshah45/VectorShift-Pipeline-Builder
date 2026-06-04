@@ -1,3 +1,4 @@
+import os
 from collections import deque
 from typing import Any, Dict, List
 
@@ -7,9 +8,14 @@ from pydantic import BaseModel
 
 app = FastAPI()
 
+# Comma-separated CORS allowlist via env (e.g. "https://your-app.vercel.app").
+# Defaults to "*" so a freshly deployed frontend works out of the box; set
+# ALLOWED_ORIGINS in production to restrict it.
+allowed_origins = os.getenv("ALLOWED_ORIGINS", "*").split(",")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=allowed_origins,
     allow_methods=["*"],
     allow_headers=["*"],
 )
