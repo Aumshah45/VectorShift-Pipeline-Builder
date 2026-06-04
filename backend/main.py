@@ -10,8 +10,13 @@ app = FastAPI()
 
 # Comma-separated CORS allowlist via env (e.g. "https://your-app.vercel.app").
 # Defaults to "*" so a freshly deployed frontend works out of the box; set
-# ALLOWED_ORIGINS in production to restrict it.
-allowed_origins = os.getenv("ALLOWED_ORIGINS", "*").split(",")
+# ALLOWED_ORIGINS in production to restrict it. Each entry is normalized
+# (whitespace + trailing slash stripped) since browsers send the bare origin.
+allowed_origins = [
+    origin.strip().rstrip("/")
+    for origin in os.getenv("ALLOWED_ORIGINS", "*").split(",")
+    if origin.strip()
+]
 
 app.add_middleware(
     CORSMiddleware,
